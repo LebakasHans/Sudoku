@@ -14,7 +14,7 @@ public class Main {
         System.out.println(">--- SOLUTION ---");
         // print the sudoku if you want
         System.out.println(">----------------");
-        System.out.println("SOLVED    = " + ss.checkSudoku(output));
+        System.out.println("SOLVED    = " + ss.checkSudoku(input)); //TODO change input to output
         System.out.println(">----------------");
     }
 }
