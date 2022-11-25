@@ -12,6 +12,7 @@ import java.util.stream.Stream;
  *    Hier sollte die Antwort auf die Aufgabe 4 stehen.
  * </answerTask4>
  */
+
 public class SudokuSolver implements ISodukoSolver {
     int[][] inputSudoku;
 
@@ -38,55 +39,58 @@ public class SudokuSolver implements ISodukoSolver {
     public boolean checkSudoku(int[][] rawSudoku) {
         int[] checkArray = new int[]{1,2,3,4,5,6,7,8,9};
 
-        int[] sudokuXArray = new int[9];
-        int[] sudokuYArray = new int[9];
-        for(int i = 0; i < rawSudoku.length;i++){
-            for (int j = 0; j < rawSudoku[i].length; j++) {
-                sudokuXArray[j] = rawSudoku[i][j];
-                sudokuYArray[j] = rawSudoku[j][i];
-            }
-            Arrays.sort(sudokuXArray);
-            Arrays.sort(sudokuYArray);
-            if(!Arrays.equals(checkArray, sudokuXArray) || !Arrays.equals(checkArray, sudokuYArray)){
+        for(int i = 0; i < rawSudoku.length; i++) {
+            if(!Arrays.equals(checkArray, getColumnArray(i, rawSudoku)) || !Arrays.equals(checkArray, getRowArray(i, rawSudoku))){
                 return false;
             }
         }
 
-        int sudokuXPosEnd = 2;
-        int sudokuYPosEnd = 2;
-        int sudokuXPosStart = 0;
-        int sudokuYPosStart = 0;
-        int[] subgrid = new int[9];
-        int counter = 0;
-
-        while(sudokuYPosEnd < rawSudoku.length){
-            for(int n = 0; n < 3; n++) {
-                for (int i = sudokuYPosStart; i <= sudokuYPosEnd; i++) {
-                    for (int j = sudokuXPosStart; j <= sudokuXPosEnd; j++) {
-                        subgrid[counter] = rawSudoku[i][j];
-                        counter++;
-                    }
-                }
-                counter = 0;
-                Arrays.sort(subgrid);
-                if (!Arrays.equals(checkArray, subgrid)) {
+        int[] block;
+        for (int j = 2; j < 9; j = j + 3) {
+            for (int i = 0; i < 9; i = i + 3) {
+                block = getBlock(i, j, rawSudoku);
+                Arrays.sort(block);
+                if (!Arrays.equals(checkArray, block)) {
                     return false;
                 }
-                sudokuXPosStart = sudokuXPosStart + 3;
-                sudokuXPosEnd = sudokuXPosEnd + 3;
             }
-            sudokuYPosEnd = sudokuYPosEnd+3;
-            sudokuYPosStart = sudokuYPosStart+3;
-            sudokuXPosStart = 0;
-            sudokuXPosEnd = 0;
         }
         return true;
     }
 
+    private int[] getBlock(int columnIndexStart, int rowIndexEnd, int[][] rawSudoku){
+        int[] block = new int[9];
+        int counter = 0;
+        for(int i = rowIndexEnd; i < rowIndexEnd + 3; i++){
+            for (int j = columnIndexStart; j <= columnIndexStart+2; j++) {
+                block[counter] = rawSudoku[i-2][j];
+                counter++;
+            }
+        }
+        return block;
+    }
+
+    private int[] getRowArray(int rowIndex, int[][] rawSudoku){
+        int[] rowArray = new int[9];
+        for(int i = 0; i < rawSudoku[rowIndex].length; i++){
+            rowArray[i] = rawSudoku[rowIndex][i];
+        }
+        return rowArray;
+    }
+
+    private int[] getColumnArray(int columnIndex, int[][] rawSudoku){
+        int[] columnArray = new int[9];
+        for(int i = 0; i < rawSudoku[columnIndex].length; i++){
+            columnArray[i] = rawSudoku[i][columnIndex];
+        }
+        return  columnArray;
+    }
+
     @Override
     public int[][] solveSudoku(int[][] rawSudoku) {
-        // implement this method
-        return new int[0][0]; // delete this line!
+
+
+        return new int[0][0];
     }
     
     @Override
