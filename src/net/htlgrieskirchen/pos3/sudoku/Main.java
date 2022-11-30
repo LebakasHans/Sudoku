@@ -18,7 +18,7 @@ public class Main {
         System.out.println(">----------------");
         System.out.println("SOLVED    = " + ss.checkSudoku(input));
         System.out.println(">----------------");
-        System.out.println("Benchmark = " + benchmark(input) + " ms");
+        System.out.println("Benchmark = " + benchmark(input) + " ns");
     }
 
 
@@ -26,11 +26,11 @@ public class Main {
         SudokuSolver ss = new SudokuSolver();
         long[] times = new long[10];
         for(int i = 0; i < times.length; i++){
-            long startingTime = System.currentTimeMillis();
+            long startingTime = System.nanoTime();
             ss.readSudoku(new File("1_sudoku_level1.csv"));
             ss.solveSudoku(rawSudoku);
             ss.checkSudoku(rawSudoku);
-            times[i] = startingTime - System.currentTimeMillis();
+            times[i] = System.nanoTime() -startingTime;
         }
 
         return (long) Arrays.stream(times).average().getAsDouble();
